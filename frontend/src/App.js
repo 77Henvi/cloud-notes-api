@@ -5,6 +5,26 @@ function App() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
+  const [notes, setNotes] = useState([]);
+
+  const fetchNotes = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("https://cloud-notes-api-qeyj.onrender.com/api/notes", {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await res.json();
+      console.log("NOTES" , data);
+      setNotes(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleLogin = async () => {
     try {
       const res = await fetch("https://cloud-notes-api-qeyj.onrender.com/api/auth/login", {
@@ -23,6 +43,8 @@ function App() {
 
         // เก็บ token
         localStorage.setItem("token", data.token);
+        
+        fetchNotes();
       } else {
         setMessage(data.message);
       }
@@ -51,8 +73,19 @@ function App() {
       <button onClick={handleLogin}>Login</button>
 
       <p>{message}</p>
+
+        <ul>
+          {notes.map((note) => (
+            <li key={note._id}>
+              <b>{note.title}</b> - {note.content}
+            </li>
+          ))}
+        </ul>
+
     </div>
   );
+
+  
 }
 
 export default App;
