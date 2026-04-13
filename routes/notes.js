@@ -13,6 +13,8 @@ router.post("/", authMiddleware, async (req, res) => {
     title,
     content,
   });
+  console.log("USER FROM TOKEN:", req.userId);
+  console.log("NOTES IN DB:", notes);
 
   res.json(note);
 });
