@@ -13,7 +13,7 @@ function App() {
 
       const res = await fetch("https://cloud-notes-api-qeyj.onrender.com/api/notes", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       });
 
