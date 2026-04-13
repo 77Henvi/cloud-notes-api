@@ -46,3 +46,7 @@ app.get("/api/protected", authMiddleware, (req, res) => {
 const noteRoutes = require("./routes/notes");
 
 app.use("/api/notes", noteRoutes);
+
+const cors = require("cors");
+
+app.use(cors());
