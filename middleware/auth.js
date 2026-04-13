@@ -1,17 +1,26 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = function (req, res, next) {
-  const token = req.header("Authorization");
-
-  if (!token) {
-    return res.status(401).json({ message: "No token, access denied" });
-  }
-
   try {
+    const authHeader = req.header("Authorization");
+
+    console.log("HEADER:", authHeader); // debug
+
+    if (!authHeader) {
+      return res.status(401).json({ message: "No token" });
+    }
+
+    const token = authHeader.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : authHeader; // รองรับทั้ง 2 แบบ
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+
+    req.userId = decoded.id;
+
     next();
   } catch (err) {
-    res.status(400).json({ message: "Invalid token" });
+    console.log("JWT ERROR:", err.message);
+    res.status(401).json({ message: "Invalid token" });
   }
 };
