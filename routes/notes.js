@@ -22,7 +22,7 @@ router.get("/", authMiddleware, async (req, res) => {
   const notes = await Note.find({
     userId: req.user.id, 
   });
-
+  console.log("USER FROM TOKEN:", req.userId);
   res.json(notes);
 });
 
